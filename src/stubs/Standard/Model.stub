@@ -1,0 +1,43 @@
+<?php
+
+namespace Modules\$MODULE$\Models;
+
+use Modules\Base\Models\BaseModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class $MODEL_CLASS$ extends BaseModel
+{
+    use SoftDeletes;
+    // use CloudBroadcastTrait;
+
+    protected $table = '$TABLE$';
+
+    protected $fillable = [
+        //
+    ];
+
+    /*
+     * =================================================
+     * Relationships
+     * =================================================
+     */
+
+
+    /*
+     * =================================================
+     * Cloud / Websocket
+     * =================================================
+     */
+    // public function getBroadcastModel(): array
+    // {
+    //     return ['id' => $this->id, 'service_id' => config('cloud.service_id', 10)];
+    // }
+
+    /*
+     * =================================================
+     * Methods
+     * =================================================
+     */
+
+
+}

@@ -1,0 +1,21 @@
+<?php
+
+namespace Modules\$MODULE$\Http\Resources;
+
+use MtLib\Resource;
+
+class $RESOURCE_CLASS$ extends Resource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param \Illuminate\Http\Request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        $data = $this->fillables('id');
+
+        return $this->makeResponse($data);
+    }
+}

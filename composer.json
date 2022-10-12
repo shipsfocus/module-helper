@@ -1,0 +1,30 @@
+{
+    "name": "mtech/module-helper",
+    "description": "Utilities for M-Tech API Projects that using laravel module pattern",
+    "homepage": "https://www.shipsfocus.com",
+    "license": "MIT",
+    "require": {
+        "nwidart/laravel-modules": "8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "MtLib\\ModuleHelper\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "shipsfocus",
+            "email": "mtech@shipsfocus.com",
+            "homepage": "https://github.com/shipsfocus",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MtLib\\ModuleHelper\\Providers\\ModuleHelperServiceProvider"
+            ]
+        }
+    }
+}

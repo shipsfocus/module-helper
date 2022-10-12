@@ -1,0 +1,18 @@
+<?php
+
+namespace Modules\$MODULE$\Repositories;
+
+use Modules\Base\Repositories\Concerns\HasCrud;
+use Modules\Base\Repositories\Repository;
+use Modules\$MODULE$\Contracts\$CONTRACT_CLASS$;
+use Modules\$MODULE$\Models\$MODEL_CLASS$;
+
+class $REPOSITORY_CLASS$ extends Repository implements $CONTRACT_CLASS$
+{
+    use HasCrud;
+
+    public function __construct($MODEL_CLASS$ $model)
+    {
+        parent::__construct($model);
+    }
+}

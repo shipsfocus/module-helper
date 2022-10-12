@@ -1,0 +1,38 @@
+<?php
+
+namespace Modules\$MODULE$\Http\Requests\Attachment;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class Store extends FormRequest
+{
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'file.*'             => 'required|mimes:' . implode(",", array_keys(config('$MODULE_CONFIG$.attachments.mimes'))) . '|max:' . config('$MODULE_CONFIG$.attachments.max_size'),
+//            'attachment_type_id' => [
+//                'required',
+//                'integer',
+//                Rule::exists('slave_company_attachment_types', 'id')->where(function ($query) {
+//                    return $query->whereNull('deleted_at');
+//                }),
+//            ],
+        ];
+    }
+
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+}

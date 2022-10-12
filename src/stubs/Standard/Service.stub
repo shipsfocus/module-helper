@@ -1,0 +1,48 @@
+<?php
+
+namespace Modules\$MODULE$\Services;
+
+use Modules\$MODULE$\Contracts\$CONTRACT_CLASS$;
+
+class $SERVICE_CLASS$
+{
+    protected $$MODEL_LOWER$Repository;
+
+    public function __construct (
+        $MODEL$Contract $$MODEL_LOWERCASE$Contract
+    )
+    {
+        $this->$MODEL_LOWERCASE$Repository = $$MODEL_LOWERCASE$Contract;
+    }
+
+    public function findOrFail($id)
+    {
+        return $this->$MODEL_LOWERCASE$Repository->findOrFail($id);
+    }
+
+    public function getModel()
+    {
+        return $this->$MODEL_LOWERCASE$Repository->getModel();
+    }
+
+    public function store($data)
+    {
+        $model = $this->$MODEL_LOWERCASE$Repository->add($data);
+
+        return $model;
+    }
+
+    public function update($id, $data)
+    {
+        $model = $this->findOrFail($id);
+
+        return $this->$MODEL_LOWERCASE$Repository->edit($id, $data);
+    }
+
+    public function delete($id)
+    {
+        $model = $this->findOrFail($id);
+
+        return $this->$MODEL_LOWERCASE$Repository->delete($id);
+    }
+}

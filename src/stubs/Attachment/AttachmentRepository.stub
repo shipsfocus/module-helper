@@ -1,0 +1,149 @@
+<?php
+
+namespace Modules\$MODULE$\Repositories;
+
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Modules\Base\Repositories\Concerns\HasCrud;
+use Modules\Base\Repositories\Repository;
+use common\Includes\Exceptions\Fish\UnsupportedMimeTypeException;
+use common\Includes\Exceptions\Fish\UploadableMaxSizeException;
+use Modules\$MODULE$\Contracts\$CONTRACT_CLASS$;
+use Modules\$MODULE$\Models\$MODEL$;
+use Modules\$MODULE$\Models\$MODEL_CLASS$;
+
+class $REPOSITORY_CLASS$ extends Repository implements $CONTRACT_CLASS$
+{
+    use HasCrud;
+
+    public function __construct($MODEL_CLASS$ $model)
+    {
+        parent::__construct($model);
+    }
+
+    public function deleteAttachmentBy$MODEL$Id($model_id)
+    {
+        $attachment = $this->model
+            ->where(
+                [
+                    '$FOREIGN_KEY$' => $model_id,
+                    // 'cp_attachment_type_id'    => $attachment_type_id,
+                ])
+            ->first();
+
+        if ($attachment) {
+            $files = Storage::disk('local')->allFiles($attachment->path);
+
+            if (count($files) === 1) {
+                // Delete both the folder and file
+                Storage::disk('local')->deleteDirectory($attachment->path);
+            } else {
+                Storage::disk('local')->delete($attachment->path . DIRECTORY_SEPARATOR . $attachment->filename);
+            }
+
+            $attachment->delete();
+
+            $attachment->deleteBucket();
+
+            return $attachment;
+        }
+
+        return null;
+    }
+
+    public function attachUploadedFile($MODEL$ $model, UploadedFile $file)
+    {
+        if ($file instanceof UploadedFile) {
+            $this->validateFile($file);
+            $path = config('$MODULE_CONFIG$.attachments.folder_name') . DIRECTORY_SEPARATOR . Str::random(12);
+        } else {
+            $path = config('$MODULE_CONFIG$.attachments.folder_name') . DIRECTORY_SEPARATOR . Str::random(12);
+        }
+
+        $timestamp_filename = intval(round(microtime(true) * 1000));
+
+        $attachment = new $this->model;
+        $explode = explode('.',$file->getClientOriginalName());
+        $attachment->filename = $timestamp_filename . '.' . end($explode);
+        $attachment->original_filename = $file->getClientOriginalName();
+        $attachment->path = $path;
+        $attachment->mime_type = ($file instanceof UploadedFile) ? $file->getMimeType() : 'application/pdf';
+        $attachment->$FOREIGN_KEY$ = $model->id;
+        // $attachment->cp_attachment_type_id = $attachment_type_id;
+
+        if ($file instanceof UploadedFile) {
+            Storage::disk('local')->putFileAs($attachment->path, $file, $attachment->filename);
+        } else {
+            $content = $file->getOriginalContent();
+            Storage::disk('local')->put($attachment->path . DIRECTORY_SEPARATOR . $timestamp_filename . '.pdf', $content);
+        }
+
+        $return = $attachment->saveBucket() && $attachment->save();
+
+        return $attachment;
+    }
+
+    public function attachBinaryFile($MODEL$ $model, $filename, $file)
+    {
+        $fileInfo = explode(";base64,", $file);
+        if ($file instanceof UploadedFile) {
+            $this->validateFile($file);
+        }
+
+        $path = config('$MODULE_CONFIG$.attachments.folder_name') . DIRECTORY_SEPARATOR . Str::random(12);
+        $mime = str_replace('data:', "", $fileInfo[0]);
+        $extension = explode('/', $mime)[1];
+
+        $timestamp_filename = intval(round(microtime(true) * 1000)) . '.' . $extension;
+
+        $attachment = new $this->model;
+        $attachment->filename = $timestamp_filename;
+        $attachment->original_filename = $timestamp_filename;
+        $attachment->path = $path;
+        $attachment->mime_type = $mime;
+        $attachment->$FOREIGN_KEY$ = $model->id;
+        // $attachment->cp_attachment_type_id = $attachment_type_id;
+
+        Storage::disk('local')->put($path . DIRECTORY_SEPARATOR . $timestamp_filename, base64_decode($fileInfo[1]));
+
+        $return = ($attachment->saveBucket() && $attachment->save());
+
+        return $attachment;
+    }
+
+    protected function validateFile($filename, $path = null)
+    {
+        $config = config('$MODULE_CONFIG$.attachments');
+
+        // Check if instanceof UploadedFile is being parsed in
+        if ($filename instanceof UploadedFile) {
+            $mime = $filename->getClientMimeType();
+            $size = $filename->getSize();
+        } else {
+            // Else instantiate new Uploaded File
+            $fullpath = $path . DIRECTORY_SEPARATOR . $filename;
+            $upload = new UploadedFile($fullpath, $filename, mime_content_type($fullpath));
+            $mime = $upload->getClientMimeType();
+            $size = $upload->getSize();
+        }
+
+        if ($mime) {
+            $mimes = array_values($config['mimes']);
+            if (!in_array($mime, $mimes)) {
+                // throw new UnsupportedMimeTypeException($mime, $mimes);
+                throw new UnsupportedMimeTypeException();
+            }
+        }
+
+        if ($size) {
+            $limit = $config['max_size'] * 1000;
+            if ($limit < $size) {
+                // throw new UploadableMaxSizeException($size, $limit);
+                throw new UploadableMaxSizeException();
+            }
+        }
+
+        return true;
+    }
+}

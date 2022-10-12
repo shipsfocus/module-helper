@@ -1,0 +1,36 @@
+<?php
+
+namespace Modules\$MODULE$\Http\Controllers;
+
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
+use Modules\Base\Response\ApiResponse;
+use Modules\$MODULE$\Http\Resources\$RESOURCE_CLASS$;
+use Modules\$MODULE$\Services\$SERVICE_CLASS$;
+use Spatie\QueryBuilder\AllowedFilter;
+
+class $CONTROLLER_CLASS$ extends Controller
+{
+    use ApiResponse;
+
+    protected $$MODEL_LOWERCASE$Service;
+
+    public function __construct(
+        $SERVICE_CLASS$ $$MODEL_LOWERCASE$Service
+    )
+    {
+        $this->$MODEL_LOWERCASE$Service = $$MODEL_LOWERCASE$Service;
+    }
+
+    public function index()
+    {
+        $builder = $this->$MODEL_LOWERCASE$Service->getModel()->toQueryBuilder()
+            ->allowedFilters(
+                AllowedFilter::exact('id'),
+            )
+            ->setPagination();
+
+        return $MODEL$Resource::collection($builder->get())
+            ->additional($builder->getPaginationMeta());
+    }
+}

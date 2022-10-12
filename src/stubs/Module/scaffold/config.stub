@@ -1,0 +1,17 @@
+<?php
+
+return [
+    'name' => '$STUDLY_NAME$',
+    'bindings' => [
+    ],
+    'attachments' => [
+        'folder_name' => 'examples',
+        'mimes' => [
+            'pdf' => 'application/pdf',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png'
+        ],
+        'max_size' => 20000 // in Kilobytes
+    ]
+];

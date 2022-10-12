@@ -1,0 +1,16 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Base\Models\BaseModel;
+
+class $CLASS$ extends BaseModel
+{
+    use SoftDeletes;
+
+    protected $table = '';
+
+    protected $fillable = $FILLABLE$;
+
+}

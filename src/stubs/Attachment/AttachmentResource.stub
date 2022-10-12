@@ -1,0 +1,24 @@
+<?php
+
+namespace Modules\$MODULE$\Http\Resources;
+
+use MtLib\Resource;
+
+class $RESOURCE_CLASS$ extends Resource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param \Illuminate\Http\Request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        $data = $this->fillables('id');
+        $data['filename'] = $this->original_filename;
+        $data['attachment_url'] = $this->path . DIRECTORY_SEPARATOR . $this->filename ?? null;
+        // $data['attachment_route'] = route('companies.attachment.view', [$this->company_id, 'attachment_type_id' => $this->type_id]) ?? null;
+
+        return $this->makeResponse($data);
+    }
+}

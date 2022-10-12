@@ -1,0 +1,130 @@
+<?php
+
+namespace $CLASS_NAMESPACE$;
+
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Modules\Base\Response\ApiResponse;
+use Modules\Base\Filters\NumberFilter;
+use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+
+class $CLASS$ extends Controller
+{
+    use ApiResponse;
+    
+    protected $$LOWER_NAME$Repository;
+
+    public function __construct(
+        $STUDLY_NAME$Contract $$LOWER_NAME$Contract
+    )
+    {
+        $this->$LOWER_NAME$Repository = $$LOWER_NAME$Contract;
+        
+        $this->middleware('permission:page_$LOWER_NAME$')->only('index');
+        $this->middleware('permission:view_$LOWER_NAME$')->only('show');
+        $this->middleware('permission:create_$LOWER_NAME$')->only('store');
+        $this->middleware('permission:update_$LOWER_NAME$')->only('update');
+        $this->middleware('permission:delete_$LOWER_NAME$')->only('destroy');
+    }
+    
+    /**
+     * Display a listing of the resource.
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function index()
+    {
+        $builder = $this->$LOWER_NAME$Repository->getModel()->toQueryBuilder()
+                    ->allowedFilters(
+                        AllowedFilter::exact('id'),
+                    )
+                    ->setExcludeListBuilderAfterFilters()
+                    ->setPagination();
+        
+        return $STUDLY_NAME$Resource::collection($builder->with(['details','attachments'])
+            ->get())
+            ->additional(
+                $builder->getPaginationMeta()
+            );
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Store $request)
+    {
+        DB::beginTransaction();
+        
+        try {
+            $$LOWER_NAME$ = $this->$LOWER_NAME$Repository->add($request->validated());
+
+            DB::commit();
+        } catch(\Throwable $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+        return $this->respondSuccess('$STUDLY_NAME$ created', $$LOWER_NAME$);
+    }
+
+    /**
+     * Show the specified resource.
+     * @param int $id
+     * @return $STUDLY_NAME$Resource
+     */
+    public function show($id)
+    {
+        $$LOWER_NAME$ = $this->$LOWER_NAME$Repository->findOrFail($id);
+        
+        return new $STUDLY_NAME$Resource($$LOWER_NAME$);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Update $request, $id)
+    {
+        $$LOWER_NAME$ = $this->$LOWER_NAME$Repository->findOrFail($id);
+
+        DB::beginTransaction();
+
+        try {
+            $$LOWER_NAME$ = $this->$LOWER_NAME$Repository->edit($id, $request->validated());
+
+            DB::commit();
+        } catch(\Throwable $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+        return $this->respondSuccess('$STUDLY_NAME$ updated', $$LOWER_NAME$);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($id)
+    {
+        $$LOWER_NAME$ = $this->$LOWER_NAME$Repository->findOrFail($id);
+        
+                DB::beginTransaction();
+        
+                try {
+                    $this->$LOWER_NAME$Repository->delete($id);
+                    DB::commit();
+                } catch(\Throwable $e) {
+                    DB::rollback();
+                    throw $e;
+                }
+        
+                return $this->respondSuccess('$STUDLY_NAME$ deleted');
+    }
+}

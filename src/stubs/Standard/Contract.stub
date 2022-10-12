@@ -1,0 +1,11 @@
+<?php
+
+namespace Modules\Voyage\Contracts;
+
+use Modules\Base\Contracts\CrudContract;
+use Modules\Base\Contracts\SoftDeleteContract;
+
+interface $CONTRACT_CLASS$ extends CrudContract, SoftDeleteContract
+{
+
+}

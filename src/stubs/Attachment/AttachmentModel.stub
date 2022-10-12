@@ -1,0 +1,66 @@
+<?php
+
+namespace Modules\$MODULE$\Models;
+
+use Modules\Base\Models\BaseModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
+
+class $MODEL_CLASS$ extends BaseModel
+{
+    use SoftDeletes;
+    // use CloudBroadcastTrait;
+
+    protected $table = '$TABLE$';
+
+    protected $fillable = [
+        'path',
+        'filename',
+        'original_filename',
+        'mime_type',
+    ];
+
+    public function getFileObject()
+        {
+    //        if (Config::get('cloud.storage.enable', false) && $this->url) {
+    //            $file = Storage::disk('s3_company_photo')->get($this->url);
+    //        } else if (Storage::disk('local')->exists($this->path . DIRECTORY_SEPARATOR . $this->filename)) {
+                $file = Storage::disk('local')->get($this->path . DIRECTORY_SEPARATOR . $this->filename);
+    //        }
+
+            return $file;
+        }
+
+        public function saveBucket()
+        {
+    //        if (!Config::get('cloud.storage.enable', false))
+    //            return true;
+    //        $s3FileName = '/company_photos/'.intval(round(microtime(true) * 1000)) . '_' . $this->company_id;
+    //
+    //        if (($this->url ?? false))
+    //            Storage::disk('s3_company_photo')->delete($this->url);
+    //
+    //        $file = Storage::disk('local')->get($this->path . DIRECTORY_SEPARATOR . $this->filename);
+    //        Storage::disk('s3_company_photo')->put($s3FileName, ($file instanceof UploadedFile) ? file_get_contents($file) : $file);
+    //
+    //        $this->setAttribute('url', $s3FileName);
+
+            return true;
+        }
+
+        public function deleteBucket()
+        {
+    //        if (!Config::get('cloud.storage.enable', false))
+    //            return true;
+
+    //        if (($this->url ?? false))
+    //            Storage::disk('s3_company_photo')->delete($this->url);
+
+            return true;
+        }
+
+    //    public function getAttachmentUrlAttribute()
+    //    {
+    //        return "companies/$this->company_id/attachment?attachment_type_id=$this->type_id";
+    //    }
+}

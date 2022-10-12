@@ -1,0 +1,124 @@
+<?php
+
+namespace Modules\$MODULE$\Http\Controllers;
+
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Modules\Base\Response\ApiResponse;
+use Modules\$MODULE$\Http\Requests\Attachment\Store;
+use Modules\$MODULE$\Contracts\$CONTRACT_CLASS$;
+use Modules\$MODULE$\Contracts\$MODEL$Contract;
+use Modules\$MODULE$\Http\Resources\$RESOURCE_CLASS$;
+//use Modules\$MODULE$\Models\CharterPartyAttachmentType;
+
+class $CONTROLLER_CLASS$ extends Controller
+{
+    use ApiResponse;
+
+    protected $$MODEL$AttachmentRepository;
+    protected $$MODEL$Repository;
+
+    public function __construct(
+        $MODEL$Contract $$MODEL$Contract,
+        $CONTRACT_CLASS$ $$MODEL$AttachmentContract
+    )
+    {
+        $this->$MODEL$Repository = $$MODEL$Contract;
+        $this->$MODEL$AttachmentRepository = $$MODEL$AttachmentContract;
+    }
+
+    public function store(Store $request, $model_id)
+    {
+        $model = $this->$MODEL$Repository->findOrFail($model_id);
+
+        DB::beginTransaction();
+        try {
+            if ($model) {
+                // $attachment_type = isset($request['cp_attachment_type_id']) ? $request->cp_attachment_type_id : CharterPartyAttachmentType::LAYTIME_STATEMENT;
+                $this->$MODEL$AttachmentRepository->deleteAttachmentBy$MODEL$Id($model_id);
+                if(isset($request->binary_file)){
+                    $binary = $this->$MODEL$AttachmentRepository->attachBinaryFile($model, $request->binary_filename, $request->binary_file);
+                } else {
+                    foreach ($request->file as $uploadedFile) {
+                        $this->$MODEL$AttachmentRepository->attachUploadedFile($model, $uploadedFile);
+                    }
+                }
+            }
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollbacK();
+            throw $e;
+        }
+
+        return new $MODEL_CLASS$Resource($model);
+    }
+
+    public function view($model_id)
+    {
+        // get from s3 storage
+        try {
+            $attachment = $this->$MODEL$AttachmentRepository->getModel()
+                ->where(
+                    [
+                        '$FOREIGN_KEY$'    => $model_id,
+                        //'cp_attachment_type_id'       => request('cp_attachment_type_id', CharterPartyAttachmentType::LAYTIME_STATEMENT),
+                    ])
+                ->latest()->first();
+
+            if (!$attachment) {
+                return $this->respondErrors('File not found');
+            }
+
+            switch (Str::lower(request('response', 'binary'))) {
+                case 'base64':
+                    return response()->json(
+                        [
+                            'base64' => 'data:' . $attachment->mime_type . ';base64,' . base64_encode($attachment->getFileObject()),
+                        ], 200, [], JSON_UNESCAPED_SLASHES);
+                case 'binary':
+                    return (new Response($attachment->getFileObject(), 200))
+                        ->header('Content-Type', $attachment->mime_type ?? 'image/png');
+                default:
+                    return $this->respondErrors('File not found');
+            }
+        } catch (\Throwable $e) {
+            return $this->respondErrors('File not found');
+        }
+
+    }
+
+    public function show($path, $filename)
+    {
+        $attachment = $this->$MODEL$AttachmentRepository->getModel()->where('path', 'LIKE', '%' . $path)->where('filename', $filename)->latest()->first();
+
+        if ($attachment && Storage::disk('local')->exists($attachment->path . DIRECTORY_SEPARATOR . $filename)) {
+            $file = Storage::disk('local')->get($attachment->path . DIRECTORY_SEPARATOR . $filename);
+
+            return (new Response($file, 200))
+                ->header('Content-Type', $attachment->mime_type);
+        }
+
+        return $this->respondErrors('File not found');
+    }
+
+    public function destroy($model_id)
+    {
+        DB::beginTransaction();
+        try {
+            if ($model = $this->$MODEL$Repository->findOrFail($model_id)) {
+                $this->$MODEL$AttachmentRepository->deleteAttachmentBy$MODEL$Id($model_id);
+                //                $booking->cloudTouch(true); // for cloud
+            }
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollbacK();
+            throw $e;
+        }
+
+        return $this->respondSuccess('attachment deleted', new $MODEL_CLASS$Resource($model));
+    }
+}

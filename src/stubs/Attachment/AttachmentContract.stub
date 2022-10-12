@@ -1,0 +1,15 @@
+<?php
+
+namespace Modules\$MODULE$\Contracts;
+
+use Illuminate\Http\UploadedFile;
+use Modules\Base\Contracts\CrudContract;
+use Modules\Base\Contracts\SoftDeleteContract;
+use Modules\$MODULE$\Models\$MODEL$;
+
+interface $CONTRACT_CLASS$ extends CrudContract, SoftDeleteContract
+{
+    public function deleteAttachmentBy$MODEL$Id(int $model_id);
+
+    public function attachUploadedFile($MODEL$ $model, UploadedFile $file);
+}
