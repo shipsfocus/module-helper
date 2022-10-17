@@ -1,0 +1,42 @@
+<?php
+
+namespace Modules\$MODULE$\Database\Seeders;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Modules\$MODULE$\Contracts\$CONTRACT_CLASS$;
+
+class $MODEL$TableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        Model::unguard();
+
+        $metas = [
+            [
+                'slug' => '',
+                'name' => '',
+                'description' => NULL,
+            ],
+        ];
+
+        $metaContract = resolve($CONTRACT_CLASS$::class);
+
+        try {
+            DB::beginTransaction();
+            foreach ($metas as $meta) {
+                $metaContract->add($meta);
+            }
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+}

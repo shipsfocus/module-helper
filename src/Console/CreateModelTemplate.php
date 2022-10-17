@@ -53,6 +53,7 @@ class CreateModelTemplate extends Command
             $this->createFile('controller', true);
             $this->createFile('resource', true);
             $this->createFile('service', true);
+            $this->createFile('seeder', true);
         } else {
             $this->createFile('migration');
             $this->createFile('model');
@@ -66,7 +67,12 @@ class CreateModelTemplate extends Command
         }
 
         $this->comment('Important Note:');
-        $this->comment('Please bind Contract and Repository in Modules/' . $this->argument('module') . '/Config/config.php');
+        if ($this->option('meta')) {
+            $this->comment('- Please bind Contract and Repository in Modules/' . $this->argument('module') . '/Config/config.php');
+            $this->comment('- Please add seeder file in database/seeds/DatabaseSeeder.php.');
+        } else {
+            $this->comment('Please bind Contract and Repository in Modules/' . $this->argument('module') . '/Config/config.php');
+        }
 
         return true;
     }

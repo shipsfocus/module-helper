@@ -56,6 +56,8 @@ trait CreateTemplateTrait
                 return __DIR__ . '/../stubs/Standard/UpdateRequest.stub';
             case 'service':
                 return __DIR__ . '/../stubs/Standard/Service.stub';
+            case 'seeder':
+                return __DIR__ . '/../stubs/Meta/MetaSeeder.stub';
             default:
                 if ($this->is_meta) {
                     return __DIR__ . '/../stubs/Meta/MetaMigration.stub';
@@ -135,6 +137,8 @@ trait CreateTemplateTrait
                 return $path . 'Http' . DIRECTORY_SEPARATOR . 'Requests' . DIRECTORY_SEPARATOR . $model_singular_name . DIRECTORY_SEPARATOR . 'Update.php';
             case 'service':
                 return $path . 'Services' . DIRECTORY_SEPARATOR . $model_singular_name . 'Service.php';
+            case 'seeder':
+                return $path . 'Database' . DIRECTORY_SEPARATOR . 'Seeders' . DIRECTORY_SEPARATOR . $model_singular_name . 'TableSeeder.php';
             default:
                 return $path . 'Database' . DIRECTORY_SEPARATOR . 'Migrations' . DIRECTORY_SEPARATOR . $migration_prefix . '_create_' . $this->argument('table') . '_table.php';
         }
