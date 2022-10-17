@@ -2,6 +2,11 @@
 
 All notable changes to `mtech/module-helper` will be documented in this file
 
+1.0.4
+------------------------------------------
+- update command hints for attachment
+- fix standard contract namespace and service parameter
+
 1.0.3
 ------------------------------------------
 - updated **README.md** & **CHANGELOG.md** format

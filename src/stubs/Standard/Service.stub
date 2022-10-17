@@ -6,7 +6,7 @@ use Modules\$MODULE$\Contracts\$CONTRACT_CLASS$;
 
 class $SERVICE_CLASS$
 {
-    protected $$MODEL_LOWER$Repository;
+    protected $$MODEL_LOWERCASE$Repository;
 
     public function __construct (
         $MODEL$Contract $$MODEL_LOWERCASE$Contract

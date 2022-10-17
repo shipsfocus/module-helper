@@ -55,6 +55,7 @@ class CreateModelAttachmentTemplate extends Command
 
         $this->comment('Important Note:');
         $this->comment('- Please bind Contract and Repository in Modules/' . $this->argument('module') . '/Config/config.php');
+        $this->comment('- Please setup attachment storage path in "attachments" array in Modules/' . $this->argument('module') . '/Config/config.php');
         $this->comment('- Please add attachment relationship to Modules/'  . $this->argument('module') . '/Models/'. $this->argument('model') . '.php');
 
         return true;

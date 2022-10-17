@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Voyage\Contracts;
+namespace Modules\$MODULE$\Contracts;
 
 use Modules\Base\Contracts\CrudContract;
 use Modules\Base\Contracts\SoftDeleteContract;

@@ -2,11 +2,11 @@
 
 Create Template for Migration, Model, Contract, and Repository in Modules with one command
 
-###Installation
+<h3>Installation</h3>
 
 `composer require mtech/module-helper --dev`
 
-###How to use
+<h3>How to use</h3>
 
 ````
 php artisan mtech:make-model {module} {table} {model} --meta
@@ -31,6 +31,6 @@ Example:
   php artisan mtech:make-attachment Voyage voyage_attachments Voyage
   ````
 
-##Important Notes
+<h2>Important Notes</h2>
 
 You still need to bind contract and repository in the Config/config.php
