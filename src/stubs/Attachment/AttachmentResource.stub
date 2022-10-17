@@ -17,7 +17,6 @@ class $RESOURCE_CLASS$ extends Resource
         $data = $this->fillables('id');
         $data['filename'] = $this->original_filename;
         $data['attachment_url'] = $this->path . DIRECTORY_SEPARATOR . $this->filename ?? null;
-        // $data['attachment_route'] = route('companies.attachment.view', [$this->company_id, 'attachment_type_id' => $this->type_id]) ?? null;
 
         return $this->makeResponse($data);
     }

@@ -66,7 +66,7 @@ class CreateModelTemplate extends Command
         }
 
         $this->comment('Important Note:');
-        $this->comment('Please bind Contract and Repository in ' . $this->argument('module') . '/Config/config.php');
+        $this->comment('Please bind Contract and Repository in Modules/' . $this->argument('module') . '/Config/config.php');
 
         return true;
     }

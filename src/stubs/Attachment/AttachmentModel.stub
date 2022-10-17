@@ -14,11 +14,17 @@ class $MODEL_CLASS$ extends BaseModel
     protected $table = '$TABLE$';
 
     protected $fillable = [
+        '$FOREIGN_KEY$',
         'path',
         'filename',
         'original_filename',
         'mime_type',
     ];
+
+    public function $MODEL_LOWERCASE$()
+    {
+        return $this->belongsTo($MODEL$::class, '$FOREIGN_KEY$');
+    }
 
     public function getFileObject()
         {
@@ -59,8 +65,10 @@ class $MODEL_CLASS$ extends BaseModel
             return true;
         }
 
+    //    need to set up api first
     //    public function getAttachmentUrlAttribute()
     //    {
+    //        return "companies/$this->company_id/attachment";
     //        return "companies/$this->company_id/attachment?attachment_type_id=$this->type_id";
     //    }
 }

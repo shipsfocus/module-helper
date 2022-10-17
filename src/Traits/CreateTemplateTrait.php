@@ -136,9 +136,7 @@ trait CreateTemplateTrait
             case 'service':
                 return $path . 'Services' . DIRECTORY_SEPARATOR . $model_singular_name . 'Service.php';
             default:
-                return $this->is_attachment
-                    ? $path . 'Database' . DIRECTORY_SEPARATOR . 'Migrations' . DIRECTORY_SEPARATOR . $migration_prefix . '_create_' . $this->argument('table') . '_attachments_table.php'
-                    : $path . 'Database' . DIRECTORY_SEPARATOR . 'Migrations' . DIRECTORY_SEPARATOR . $migration_prefix . '_create_' . $this->argument('table') . '_table.php';
+                return $path . 'Database' . DIRECTORY_SEPARATOR . 'Migrations' . DIRECTORY_SEPARATOR . $migration_prefix . '_create_' . $this->argument('table') . '_table.php';
         }
     }
 
