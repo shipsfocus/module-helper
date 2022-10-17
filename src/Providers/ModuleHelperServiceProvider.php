@@ -14,7 +14,7 @@ class ModuleHelperServiceProvider extends ServiceProvider
         $this->commands([
                             CreateModelTemplate::class,
                             CreateModelAttachmentTemplate::class,
-                            CreateModuleTemplate::class,
+//                            CreateModuleTemplate::class,
                         ]);
     }
 }

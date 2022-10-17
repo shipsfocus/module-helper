@@ -2,6 +2,13 @@
 
 All notable changes to `mtech/module-helper` will be documented in this file
 
+1.0.2
+------------------------------------------
+------------------------------------------
+- fix path for README.md & CHANGELOG.md
+- removed command to create module for now as it is still using `nwidart/laravel-modules` default stub
+- updated attachment repository, `cp_attachment_type_id` to `$MODEL_LOWERCASE$_attachment_type_id` 
+
 1.0.1
 ------------------------------------------
 ------------------------------------------

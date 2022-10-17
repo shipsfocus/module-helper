@@ -28,7 +28,7 @@ class $REPOSITORY_CLASS$ extends Repository implements $CONTRACT_CLASS$
             ->where(
                 [
                     '$FOREIGN_KEY$' => $model_id,
-                    // 'cp_attachment_type_id'    => $attachment_type_id,
+                    // '$MODEL_LOWERCASE$_attachment_type_id'    => $attachment_type_id,
                 ])
             ->first();
 
@@ -70,7 +70,7 @@ class $REPOSITORY_CLASS$ extends Repository implements $CONTRACT_CLASS$
         $attachment->path = $path;
         $attachment->mime_type = ($file instanceof UploadedFile) ? $file->getMimeType() : 'application/pdf';
         $attachment->$FOREIGN_KEY$ = $model->id;
-        // $attachment->cp_attachment_type_id = $attachment_type_id;
+        // $attachment->$MODEL_LOWERCASE$_attachment_type_id = $attachment_type_id;
 
         if ($file instanceof UploadedFile) {
             Storage::disk('local')->putFileAs($attachment->path, $file, $attachment->filename);
@@ -103,7 +103,7 @@ class $REPOSITORY_CLASS$ extends Repository implements $CONTRACT_CLASS$
         $attachment->path = $path;
         $attachment->mime_type = $mime;
         $attachment->$FOREIGN_KEY$ = $model->id;
-        // $attachment->cp_attachment_type_id = $attachment_type_id;
+        // $attachment->$MODEL_LOWERCASE$_attachment_type_id = $attachment_type_id;
 
         Storage::disk('local')->put($path . DIRECTORY_SEPARATOR . $timestamp_filename, base64_decode($fileInfo[1]));
 
