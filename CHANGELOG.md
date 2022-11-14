@@ -2,6 +2,11 @@
 
 All notable changes to `mtech/module-helper` will be documented in this file
 
+1.0.5
+------------------------------------------
+- updated Attachment Controller & repository
+- fixed Attachment Migration file foreign key
+
 1.0.4
 ------------------------------------------
 - update command hints for attachment

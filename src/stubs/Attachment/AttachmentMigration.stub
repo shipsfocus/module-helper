@@ -15,7 +15,7 @@ class $MIGRATION_CLASS$ extends Migration
     {
         Schema::create('$TABLE$', function (Blueprint $table) {
             $table->id();
-            $table->string('$FOREIGN_KEY$');
+            $table->unsignedBigInteger('$FOREIGN_KEY$');
             $table->string('path');
             $table->string('filename');
             $table->string('original_filename');

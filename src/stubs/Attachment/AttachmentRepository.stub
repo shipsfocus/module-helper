@@ -28,7 +28,7 @@ class $REPOSITORY_CLASS$ extends Repository implements $CONTRACT_CLASS$
             ->where(
                 [
                     '$FOREIGN_KEY$' => $model_id,
-                    // '$MODEL_LOWERCASE$_attachment_type_id'    => $attachment_type_id,
+                    // 'type_id'    => $type_id,
                 ])
             ->first();
 
@@ -70,18 +70,25 @@ class $REPOSITORY_CLASS$ extends Repository implements $CONTRACT_CLASS$
         $attachment->path = $path;
         $attachment->mime_type = ($file instanceof UploadedFile) ? $file->getMimeType() : 'application/pdf';
         $attachment->$FOREIGN_KEY$ = $model->id;
-        // $attachment->$MODEL_LOWERCASE$_attachment_type_id = $attachment_type_id;
+        // $attachment->type_id = $type_id;
 
-        if ($file instanceof UploadedFile) {
-            Storage::disk('local')->putFileAs($attachment->path, $file, $attachment->filename);
-        } else {
-            $content = $file->getOriginalContent();
-            Storage::disk('local')->put($attachment->path . DIRECTORY_SEPARATOR . $timestamp_filename . '.pdf', $content);
+        // store to local only
+        if ($attachment->save()) {
+            if ($file instanceof UploadedFile) {
+                Storage::disk('local')->putFileAs($attachment->path, $file, $attachment->filename);
+            } else {
+                $content = $file->getOriginalContent();
+                Storage::disk('local')->put($attachment->path . DIRECTORY_SEPARATOR . $timestamp_filename . '.pdf', $content);
+            }
+
+            return $attachment;
         }
 
-        $return = $attachment->saveBucket() && $attachment->save();
+        return null;
+        // store to local and s3
+        // $return = $attachment->saveBucket() && $attachment->save();
 
-        return $attachment;
+        // return $attachment;
     }
 
     public function attachBinaryFile($MODEL$ $model, $filename, $file)
@@ -103,13 +110,17 @@ class $REPOSITORY_CLASS$ extends Repository implements $CONTRACT_CLASS$
         $attachment->path = $path;
         $attachment->mime_type = $mime;
         $attachment->$FOREIGN_KEY$ = $model->id;
-        // $attachment->$MODEL_LOWERCASE$_attachment_type_id = $attachment_type_id;
+        // $attachment->$type_id = $type_id;
 
         Storage::disk('local')->put($path . DIRECTORY_SEPARATOR . $timestamp_filename, base64_decode($fileInfo[1]));
 
-        $return = ($attachment->saveBucket() && $attachment->save());
+        // store to local only
+        return $attachment->save() ? $attachment : FALSE;
 
-        return $attachment;
+        // store to local and s3
+        // $return = ($attachment->saveBucket() && $attachment->save());
+
+        // return $attachment;
     }
 
     protected function validateFile($filename, $path = null)
