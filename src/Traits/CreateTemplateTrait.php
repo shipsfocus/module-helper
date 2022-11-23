@@ -3,6 +3,7 @@
 namespace MtLib\ModuleHelper\Traits;
 
 use Illuminate\Support\Pluralizer;
+use Illuminate\Support\Str;
 use Nwidart\Modules\Facades\Module;
 
 trait CreateTemplateTrait
@@ -75,7 +76,7 @@ trait CreateTemplateTrait
             'MODEL_LOWERCASE'  => lcfirst($this->getSingularClassName($this->argument('model'))),
             'MIGRATION_CLASS'  => $this->is_attachment ? 'Create' . $this->getSingularClassName($this->argument('model')) . 'AttachmentsTable' : 'Create' . $this->getPluralClassName($this->argument('model')) . 'Table',
             'TABLE'            => $this->argument('table'),
-            'FOREIGN_KEY'      => strtolower($this->argument('model')) . '_id',
+            'FOREIGN_KEY'      => Str::snake($this->argument('model')) . '_id',
             'MODEL_CLASS'      => $this->is_attachment ? $this->getSingularClassName($this->argument('model')) . 'Attachment' : $this->getSingularClassName($this->argument('model')),
             'CONTRACT_CLASS'   => $this->is_attachment ? $this->getSingularClassName($this->argument('model')) . 'AttachmentContract' : $this->getSingularClassName($this->argument('model')) . 'Contract',
             'REPOSITORY_CLASS' => $this->is_attachment ? $this->getSingularClassName($this->argument('model')) . 'AttachmentRepository' : $this->getSingularClassName($this->argument('model')) . 'Repository',
@@ -130,7 +131,7 @@ trait CreateTemplateTrait
                     ? $path . 'Http' . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . $model_singular_name . 'AttachmentResource.php'
                     : $path . 'Http' . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . $model_singular_name . 'Resource.php';
             case 'attachment_request':
-                return $path . 'Http' . DIRECTORY_SEPARATOR . 'Requests' . DIRECTORY_SEPARATOR . 'Attachment' . DIRECTORY_SEPARATOR . 'Store.php';
+                return $path . 'Http' . DIRECTORY_SEPARATOR . 'Requests' . DIRECTORY_SEPARATOR . $model_singular_name . 'Attachment' . DIRECTORY_SEPARATOR . 'Store.php';
             case 'store_request':
                 return $path . 'Http' . DIRECTORY_SEPARATOR . 'Requests' . DIRECTORY_SEPARATOR . $model_singular_name . DIRECTORY_SEPARATOR . 'Store.php';
             case 'update_request':

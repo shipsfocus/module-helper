@@ -2,6 +2,12 @@
 
 All notable changes to `mtech/module-helper` will be documented in this file
 
+1.0.6
+------------------------------------------
+- updated Attachment Controller parameter format
+- updated foreign key to snake_case
+- updated Attachment request folder name
+
 1.0.5
 ------------------------------------------
 - updated Attachment Controller & repository

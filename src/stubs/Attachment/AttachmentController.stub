@@ -17,32 +17,32 @@ class $CONTROLLER_CLASS$ extends Controller
 {
     use ApiResponse;
 
-    protected $$MODEL$AttachmentRepository;
-    protected $$MODEL$Repository;
+    protected $$MODEL_LOWERCASE$AttachmentRepository;
+    protected $$MODEL_LOWERCASE$Repository;
 
     public function __construct(
-        $MODEL$Contract $$MODEL$Contract,
-        $CONTRACT_CLASS$ $$MODEL$AttachmentContract
+        $MODEL$Contract $$MODEL_LOWERCASE$Contract,
+        $CONTRACT_CLASS$ $$MODEL_LOWERCASE$AttachmentContract
     )
     {
-        $this->$MODEL$Repository = $$MODEL$Contract;
-        $this->$MODEL$AttachmentRepository = $$MODEL$AttachmentContract;
+        $this->$MODEL_LOWERCASE$Repository = $$MODEL_LOWERCASE$Contract;
+        $this->$MODEL_LOWERCASE$AttachmentRepository = $$MODEL_LOWERCASE$AttachmentContract;
     }
 
     public function store(Store $request, $model_id)
     {
-        $model = $this->$MODEL$Repository->findOrFail($model_id);
+        $model = $this->$MODEL_LOWERCASE$Repository->findOrFail($model_id);
 
         DB::beginTransaction();
         try {
             if ($model) {
                 // $attachment_type = request('type_id', $MODEL$AttachmentType::TYPE_);
-                $this->$MODEL$AttachmentRepository->deleteAttachmentBy$MODEL$Id($model_id);
+                $this->$MODEL_LOWERCASE$AttachmentRepository->deleteAttachmentBy$MODEL$Id($model_id);
                 if(isset($request->binary_file)){
-                    $binary = $this->$MODEL$AttachmentRepository->attachBinaryFile($model, $request->binary_filename, $request->binary_file);
+                    $binary = $this->$MODEL_LOWERCASE$AttachmentRepository->attachBinaryFile($model, $request->binary_filename, $request->binary_file);
                 } else {
                     foreach ($request->file as $uploadedFile) {
-                        $this->$MODEL$AttachmentRepository->attachUploadedFile($model, $uploadedFile);
+                        $this->$MODEL_LOWERCASE$AttachmentRepository->attachUploadedFile($model, $uploadedFile);
                     }
                 }
             }
@@ -62,7 +62,7 @@ class $CONTROLLER_CLASS$ extends Controller
     {
         // get from s3 storage
         try {
-            $attachment = $this->$MODEL$AttachmentRepository->getModel()
+            $attachment = $this->$MODEL_LOWERCASE$AttachmentRepository->getModel()
                 ->where(
                     [
                         '$FOREIGN_KEY$'    => $model_id,
@@ -98,7 +98,7 @@ class $CONTROLLER_CLASS$ extends Controller
     */
     public function show($path, $filename)
     {
-        $attachment = $this->$MODEL$AttachmentRepository->getModel()->where('path', 'LIKE', '%' . $path)->where('filename', $filename)->latest()->first();
+        $attachment = $this->$MODEL_LOWERCASE$AttachmentRepository->getModel()->where('path', 'LIKE', '%' . $path)->where('filename', $filename)->latest()->first();
 
         if ($attachment && Storage::disk('local')->exists($attachment->path . DIRECTORY_SEPARATOR . $filename)) {
             $file = Storage::disk('local')->get($attachment->path . DIRECTORY_SEPARATOR . $filename);
@@ -114,8 +114,8 @@ class $CONTROLLER_CLASS$ extends Controller
     {
         DB::beginTransaction();
         try {
-            if ($model = $this->$MODEL$Repository->findOrFail($model_id)) {
-                $this->$MODEL$AttachmentRepository->deleteAttachmentBy$MODEL$Id($model_id);
+            if ($model = $this->$MODEL_LOWERCASE$Repository->findOrFail($model_id)) {
+                $this->$MODEL_LOWERCASE$AttachmentRepository->deleteAttachmentBy$MODEL$Id($model_id);
                 //                $booking->cloudTouch(true); // for cloud
             }
             DB::commit();
