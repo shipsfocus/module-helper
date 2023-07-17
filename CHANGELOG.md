@@ -2,6 +2,12 @@
 
 All notable changes to `mtech/module-helper` will be documented in this file
 
+1.0.7
+------------------------------------------
+- fixed Migration file class name
+- update Model stubs for slave table
+- implemented uuids
+
 1.0.6
 ------------------------------------------
 - updated Attachment Controller parameter format
