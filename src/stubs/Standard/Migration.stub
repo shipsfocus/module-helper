@@ -14,6 +14,11 @@ class $MIGRATION_CLASS$ extends Migration
     public function up()
     {
         Schema::create('$TABLE$', function (Blueprint $table) {
+            // for slave and uuid
+            // $table->unsignedBigInteger('seq')->nullable()->unique();
+            // $table->uuid('id')->primary();
+            // $table->unsignedBigInteger('service_id');
+
             $table->id();
 
             $table->unsignedInteger('created_at');

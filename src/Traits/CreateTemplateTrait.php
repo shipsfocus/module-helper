@@ -74,7 +74,7 @@ trait CreateTemplateTrait
             'MODULE_CONFIG'    => Module::find($this->argument('module'))->getLowerName(),
             'MODEL'            => $this->getSingularClassName($this->argument('model')),
             'MODEL_LOWERCASE'  => lcfirst($this->getSingularClassName($this->argument('model'))),
-            'MIGRATION_CLASS'  => $this->is_attachment ? 'Create' . $this->getSingularClassName($this->argument('model')) . 'AttachmentsTable' : 'Create' . $this->getPluralClassName($this->argument('model')) . 'Table',
+            'MIGRATION_CLASS'  => $this->is_attachment ? 'Create' . $this->getSingularClassName($this->argument('table')) . 'AttachmentsTable' : 'Create' . $this->getPluralClassName($this->argument('table')) . 'Table',
             'TABLE'            => $this->argument('table'),
             'FOREIGN_KEY'      => Str::snake($this->argument('model')) . '_id',
             'MODEL_CLASS'      => $this->is_attachment ? $this->getSingularClassName($this->argument('model')) . 'Attachment' : $this->getSingularClassName($this->argument('model')),

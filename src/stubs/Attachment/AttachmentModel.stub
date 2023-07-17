@@ -10,6 +10,7 @@ class $MODEL_CLASS$ extends BaseModel
 {
     use SoftDeletes;
     // use CloudBroadcastTrait;
+    // use ServiceIdTrait;
 
     protected $table = '$TABLE$';
 
@@ -70,5 +71,26 @@ class $MODEL_CLASS$ extends BaseModel
     //    {
     //        return "companies/$this->company_id/attachment";
     //        return "companies/$this->company_id/attachment?attachment_type_id=$this->type_id";
+    //    }
+
+    //    /**
+    //     * {@inheritdoc}
+    //     */
+    //    public static function transformCloud(array $data, /* CloudBaseModel */ $cloudModel): array
+    //    {
+    //        return [
+    //        ];
+    //    }
+    //
+    //
+    //    public static function getQueryConditior($builder, $event)
+    //    {
+    //        if(iCloudEventLog::CLOUDABLE_EVENT_CLOUD === $event) {
+    //            // get internal companies id
+    //            if(!static::isSkipConditior()) { // if admin system is not, it will be run.
+    //            }
+    //        }
+    //
+    //        return $builder;
     //    }
 }

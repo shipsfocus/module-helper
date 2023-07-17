@@ -5,10 +5,13 @@ namespace Modules\$MODULE$\Models;
 use Modules\Base\Models\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+// class $MODEL_CLASS$ extends BaseModel implements iCloudable
 class $MODEL_CLASS$ extends BaseModel
 {
     use SoftDeletes;
-    // use CloudBroadcastTrait;
+    use Uuids; // removed this when converted to slave table
+    // use ServiceIdTrait;
+    // use CloudableTrait, CloudUuidLogTrait, CloudBroadcastTrait;
 
     protected $table = '$TABLE$';
 
@@ -28,6 +31,75 @@ class $MODEL_CLASS$ extends BaseModel
      * Cloud / Websocket
      * =================================================
      */
+    // // dont hidden deleted_at to delete data by syncd system.
+    // protected $hidden = ['created_at', 'updated_at'];
+    //
+    // /** Log fillable attributes **/
+    // protected static $isCloudLog = true;
+    //
+    // // Begin of cloud code
+    // public static function getResourceType()
+    // {
+    //     return \common\Clouds\Models\Metas\CloudEventType::EVENT_LOG;
+    // }
+    //
+    // public function isAsync(): bool
+    // {
+    //     return false;
+    // }
+    //
+    // /**
+    //  * {@inheritdoc}
+    //  * this is for Attributes.
+    //  */
+    // public function getCloudAttributes()
+    // {
+    //     return [];  // NO Attributes is that always create new data.
+    // }
+    //
+    //
+    // public static function transformPost(array $data, /* iCloudable */ $model)
+    // {
+    // }
+    //
+    // /**
+    //  * {@inheritdoc}
+    //  */
+    // public static function transformCloud(array $data, /* CloudBaseModel */ $cloudModel): array
+    // {
+    //     return [
+    //     ];
+    // }
+    //
+    // public static function transformSlave(array $data, /* iCloudable */ $model): array
+    // {
+    //     $data = [
+    //     ];
+    //
+    //     return $data;
+    // }
+    //
+    // public static function getQueryConditior($builder, $event)
+    // {
+    //     // if(iCloudEventLog::CLOUDABLE_EVENT_CLOUD === $event) {
+    //     //     if(!static::isSkipConditior()) {
+    //     //     }
+    //     // }
+    //     return $builder;
+    // }
+    //
+    //
+    // public function modifyAttributeValue($attribute, $value, $isOld = false)
+    // {
+    //     $maploggingValues = [
+    //         'seq'          => null,
+    //         'id'           => null,
+    //         'event_status' => null,
+    //     ];
+    //
+    //     return (array_key_exists($attribute, $maploggingValues) ? $maploggingValues[$attribute] : $value);
+    // }
+    //
     // public function getBroadcastModel(): array
     // {
     //     return ['id' => $this->id, 'service_id' => config('cloud.service_id', 10)];
